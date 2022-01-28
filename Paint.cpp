@@ -165,7 +165,16 @@ int main()
 		getBoardNow();
 		cout<<"Start cycle "<<rcnt<<endl;
 		vector<Pixel> need=compareBoard();
-		cout<<"Compare result : "<<need.size()<<"/"<<wntCnt<<" needed to paint";
+		if(rcnt!=1&&1.0*need.size()/wntCnt>0.7)
+		{
+			cout<<"Compare result : "<<need.size()<<"/"<<wntCnt<<" need to paint";
+			cout<<" ("<<1.0*(wntCnt-need.size())/wntCnt*100<<"% completed)"<<endl;
+			cout<<"It's weird for the area to change this fast. Maybe there are some bugs. Get the board data again."<<endl;
+			Sleep(3000);
+			getBoardNow();
+			need=compareBoard();
+		}
+		cout<<"Compare result : "<<need.size()<<"/"<<wntCnt<<" need to paint";
 		cout<<" ("<<1.0*(wntCnt-need.size())/wntCnt*100<<"% completed)"<<endl;
 		for(int i=0;i<need.size();i++)
 		{
@@ -175,6 +184,6 @@ int main()
 			cout<<"("<<1.0*(i+1)/need.size()*100<<"% completed)"<<endl;
 			Sleep(cookieRechargeTime/cookies.size()+500);
 		}
-		Sleep(10000);
+		Sleep(8000+(need.size()>=1)*2000);
 	}
 }
