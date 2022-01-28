@@ -99,6 +99,21 @@ void getBoardNow()
 	system("rename board board.txt > rb");
 	fstream fb;
 	fb.open("board.txt",ios::in);
+	int fcnt=0;
+	while(fb.rdstate()==ios::failbit)
+	{
+		fcnt++;
+		if(fcnt%3==0)
+		{
+			system("del board*");
+			sprintf(cmd,(getBoardCmd+" > board.br").c_str(),getCookie().c_str());
+			system(cmd);
+		}
+		sprintf(cmd,(unZipCmd+" > rb").c_str(),"board.br");
+		system(cmd);
+		system("rename board board.txt > rb");
+		fb.open("board.txt",ios::in);
+	}
 	string str="";
 	fb>>str;
 	for(int i=0,pl=str.find('[',0),pr=pl;i<boardh;i++,pl=pr+1)
