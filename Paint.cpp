@@ -102,6 +102,7 @@ void getBoardNow()
 	int fcnt=0;
 	while(fb.rdstate()==ios::failbit)
 	{
+		Sleep(3000);
 		fcnt++;
 		if(fcnt%3==0)
 		{
@@ -180,15 +181,6 @@ int main()
 		getBoardNow();
 		cout<<"Start cycle "<<rcnt<<endl;
 		vector<Pixel> need=compareBoard();
-		if(rcnt!=1&&1.0*need.size()/wntCnt>0.7)
-		{
-			cout<<"Compare result : "<<need.size()<<"/"<<wntCnt<<" need to paint";
-			cout<<" ("<<1.0*(wntCnt-need.size())/wntCnt*100<<"% completed)"<<endl;
-			cout<<"It's weird for the area to change this fast. Maybe there are some bugs. Get the board data again."<<endl;
-			Sleep(3000);
-			getBoardNow();
-			need=compareBoard();
-		}
 		cout<<"Compare result : "<<need.size()<<"/"<<wntCnt<<" need to paint";
 		cout<<" ("<<1.0*(wntCnt-need.size())/wntCnt*100<<"% completed)"<<endl;
 		for(int i=0;i<need.size();i++)
