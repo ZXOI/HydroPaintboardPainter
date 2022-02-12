@@ -31,7 +31,7 @@ string paintPixelCmd=(string)"curl \"https://hydro.ac/api\" -X POST "+
 "-H \"Sec-Fetch-Mode: cors\" "+
 "-H \"Sec-Fetch-Site: same-origin\" "+
 "-H \"Connection: keep-alive\" "+
-"-H \"Cookie: \"%s\" \" "+
+"-H \"Cookie: %s \" "+
 "--data-raw \"query=\"%\"7Bpaintboard\"%\"7Bpaint(x\"%\"3A%d\"%\"2Cy\"%\"3A%d\"%\"2Ccolor\"%\"3A%d)\"%\"7D\"%\"7D\" "+
 "-s";
 int trans(char x)
@@ -92,7 +92,6 @@ void getBoardNow()
 {
 	system("del board*");
 	sprintf(cmd,(getBoardCmd+" > board.br").c_str(),getCookie().c_str());
-//	printf("Command : %s\n",cmd);
 	system(cmd);
 	sprintf(cmd,(unZipCmd+" > rb").c_str(),"board.br");
 	system(cmd);
@@ -143,7 +142,7 @@ vector<Pixel> compareBoard()
 				continue;
 			if(boardNow[i][j]!=boardWnt[i][j])
 			{
-				// cout<<"diff <"<<i<<","<<j<<"> : "<<boardNow[i][j]<<" != "<<boardWnt[i][j]<<endl;
+				// cout<<"diff "<<i<<" "<<j<<" w="<<boardWnt[i][j]<<" n="<<boardNow[i][j]<<endl;
 				ans.push_back((Pixel){i,j,boardWnt[i][j]});
 			}
 		}
@@ -166,7 +165,7 @@ bool paintPixel(Pixel p)
 	}
 	else
 	{
-		cout<<"Failed to paint pixel <"<<p.x<<","<<p.y<<","<<p.c<<">"<<endl;
+		cout<<"Failed to paint pixel <"<<p.x<<","<<p.y<<","<<p.c<<"> , error="<<s<<endl;
 		return 0;
 	}
 }
@@ -175,6 +174,7 @@ int main()
 	getCookies();
 	getBoardWnt();
 	int rcnt=0;
+	int scnt=0;
 	while(1)
 	{
 		rcnt++;
@@ -191,6 +191,10 @@ int main()
 			cout<<"("<<1.0*(i+1)/need.size()*100<<"% completed)"<<endl;
 			Sleep(cookieRechargeTime/cookies.size()+500);
 		}
-		Sleep(8000+(need.size()>=1)*2000);
+		if(need.size()==0)
+			scnt+=1;
+		else
+			scnt=0;
+		Sleep((scnt>=1)*5000+(scnt>=3)*7500+(scnt>=7)*17500);
 	}
 }
